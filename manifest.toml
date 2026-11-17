@@ -1,0 +1,126 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "hyphanet"
+name = "Freenet"
+description.en = "Censorship-resistant network for anonymous publishing and browsing"
+description.fr = "Réseau résistant à la censure pour publier et naviguer anonymement"
+
+version = "0.7.5+1507~ynh1"
+
+maintainers = ["quartztester"]
+
+[upstream]
+license = "GPL-2.0-or-later"
+website = "https://freenetproject.org"
+admindoc = "https://hyphanet.org"
+code = "https://github.com/hyphanet/fred"
+
+[integration]
+yunohost = ">= 12.1.17"
+helpers_version = "2.1"
+architectures = "all"
+multi_instance = false
+
+ldap = "not_relevant"
+sso = "not_relevant"
+
+disk = "1G"
+ram.build = "50M"
+ram.runtime = "1G"
+
+[install]
+    [install.domain]
+    # the fproxy UI emits root-absolute links, so it needs a dedicated subdomain
+    type = "domain"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.store_size]
+    ask.en = "Datastore size in MB"
+    ask.fr = "Taille du magasin de données en Mo"
+    help.en = "Freenet stores routed data on disk (upstream minimum: 256 MB)."
+    help.fr = "Freenet stocke les données routées sur disque (minimum amont : 256 Mo)."
+    type = "number"
+    default = 1024
+
+    [install.bandwidth_limit]
+    ask.en = "Bandwidth limit in kB/s (both up and down)"
+    ask.fr = "Limite de bande passante en kB/s (montant et descendant)"
+    type = "number"
+    default = 64
+
+    [install.listen_port]
+    ask.en = "Port to listen on for peer connections"
+    ask.fr = "Port d'écoute pour les connexions entre pairs"
+    help.en = "Leave empty to pick a random high port. Forward this port (UDP/TCP) through your router for better connectivity."
+    help.fr = "Laisser vide pour choisir un port élevé au hasard. Transférez ce port (UDP/TCP) via votre routeur pour une meilleure connectivité."
+    type = "string"
+    optional = true
+    default = ""
+
+[resources]
+    [resources.sources]
+
+    [resources.sources.main]
+    url = "https://github.com/hyphanet/fred/releases/download/build01507/freenet.jar"
+    sha256 = "7ab7d1f36a4e0a72b72a36d9f1e1ec40f169df08b398ce26449e07621a3db60d"
+    rename = "freenet.jar"
+    autoupdate.strategy = "latest_github_release"
+    autoupdate.asset = '^freenet\.jar$'
+
+    [resources.sources.ext]
+    url = "https://mvn.freenetproject.org/org/freenetproject/freenet-ext/29/freenet-ext-29.jar"
+    sha256 = "32f2b3d6beedf54137ea2f9a3ebef67666d769f0966b08cd17fd7db59ba4d79f"
+    rename = "freenet-ext-29.jar"
+
+    [resources.sources.bcprov]
+    url = "https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.59/bcprov-jdk15on-1.59.jar"
+    sha256 = "1c31e44e331d25e46d293b3e8ee2d07028a67db011e74cb2443285aed1d59c85"
+    rename = "bcprov-jdk15on-1.59.jar"
+
+    [resources.sources.jna]
+    url = "https://repo1.maven.org/maven2/net/java/dev/jna/jna/4.5.2/jna-4.5.2.jar"
+    sha256 = "0c8eb7acf67261656d79005191debaba3b6bf5dd60a43735a245429381dbecff"
+    rename = "jna-4.5.2.jar"
+
+    [resources.sources.jna-platform]
+    url = "https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/4.5.2/jna-platform-4.5.2.jar"
+    sha256 = "f1d00c167d8921c6e23c626ef9f1c3ae0be473c95c68ffa012bc7ae55a87e2d6"
+    rename = "jna-platform-4.5.2.jar"
+
+    [resources.sources.pebble]
+    url = "https://repo1.maven.org/maven2/io/pebbletemplates/pebble/3.1.5/pebble-3.1.5.jar"
+    sha256 = "d253a6dde59e138698aaaaee546461d2f1f6c8bd2aa38ecdd347df17cf90d6f0"
+    rename = "pebble-3.1.5.jar"
+
+    [resources.sources.unbescape]
+    url = "https://repo1.maven.org/maven2/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar"
+    sha256 = "597cf87d5b1a4f385b9d1cec974b7b483abb3ee85fc5b3f8b62af8e4bec95c2c"
+    rename = "unbescape-1.1.6.RELEASE.jar"
+
+    [resources.sources.slf4j]
+    url = "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
+    sha256 = "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+    rename = "slf4j-api-1.7.25.jar"
+
+    # same seed list upstream's debian/rules builds seednodes.fref from
+    [resources.sources.seedrefs]
+    url = "https://github.com/hyphanet/seedrefs/archive/refs/heads/master.zip"
+    sha256 = "0b19bd500d7742a491bed13a5be3b56c7c6afe5edd3d2c54b5970d55491bf1b0"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.ports]
+    main.default = 8444
+
+    [resources.apt]
+    packages = "default-jre-headless, libservice-wrapper-java"
