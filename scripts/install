@@ -21,6 +21,9 @@ ynh_app_setting_set_default --key=listen_port --value=""
 ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir"
+for id in ext bcprov jna jna-platform pebble unbescape slf4j; do
+	ynh_setup_source --dest_dir="$install_dir" --source_id="$id"
+done
 ynh_setup_source --dest_dir="$install_dir/seedrefs" --source_id=seedrefs
 
 chown -R "$app:$app" "$install_dir"
