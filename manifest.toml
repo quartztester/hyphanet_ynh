@@ -36,8 +36,10 @@ ram.runtime = "1G"
     type = "domain"
 
     [install.init_main_permission]
+    # fproxy lets whoever reaches it reconfigure the node (threat levels, keys),
+    # so it should not be world-open by default
     type = "group"
-    default = "visitors"
+    default = "all_users"
 
     [install.store_size]
     ask.en = "Datastore size in MB"
